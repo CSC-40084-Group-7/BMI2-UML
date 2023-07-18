@@ -110,12 +110,19 @@ class "ModerationResult" as moderationresult {
 
 ' Relationships
 
+event -- delegate
+event -- moderator
+event -- company
+
 delegate -- standinteraction
 delegate -- sessioninteraction
 delegate -- sessionregistration
 
 exhibitor -- stand
+
 company -- exhibitor
+
+moderator -- moderationresult
 
 
 ' Inheritance
@@ -129,18 +136,13 @@ person <|-- speaker
 
 event *-- session
 event *-- stand
-event *-- delegate
-event *-- moderator
-event *-- company
 
 ' Aggregation
 
 session *-- sessioninteraction
 session *-- sessionregistration
 stand *-- standinteraction
-moderator *-- moderationresult
 sessioninteraction *-- moderationresult
-
 
 ' Notes
 
