@@ -114,7 +114,7 @@ event "1" -- "many" delegate
 event "1" -- "many" moderator
 event "1" -- "many" company
 
-delegate "1" -- "many" standinteraction : visits
+delegate "1" -- "many" standinteraction : interacts with
 delegate "1" -- "many" sessioninteraction : asks
 delegate "1" -- "many" sessionregistration : registers
 
