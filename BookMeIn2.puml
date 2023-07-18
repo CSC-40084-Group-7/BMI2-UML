@@ -124,6 +124,8 @@ company "1" -- "1..n" exhibitor : employs
 
 moderator "1" -- "0..n" moderationresult 
 
+speaker "1" -- "1..n" session : presents
+
 
 ' Inheritance
 
