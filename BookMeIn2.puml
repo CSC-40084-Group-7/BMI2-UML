@@ -12,82 +12,97 @@ Speaker: An individual presenting the session. These can be the same as exhibito
 Stand: One per company at the event. These companies are ones that have paid to have a stand at the event.  Often these will be sponsors of the event looking to sell some sort of software or service to the delegates.   Multiple Exhibitors may work on one stand though.
 '/
 
-class "Event" as  event
-class "Delegate" as delegate
-class "Exhibitor" as exhibitor
-class "Moderator" as moderator
-class "Session" as session
-class "Speaker" as speaker
-class "Stand" as stand
-class "Company" as company
-class "SessionRegistration" as sessionregistration
-class "StandInteraction" as standinteraction
-class "SessionInteraction" as sessioninteraction
-class "ModerationResult" as moderationresult
+' Entities
 
-event : id
-event : name
-event : description
-event : startdate
-event : enddate
-event : location
-event : maxdelegates
+class "Event" as event {
+    - id: string
+    + name: string
+    + description: string
+    + startdate: date
+    + enddate: date
+    + location: string
+    + maxdelegates: int
+}
 
-delegate : id
-delegate : name
-delegate : email
-delegate : company
-delegate : jobtitle
+class "Delegate" as delegate {
+    - id: string
+    + name: string
+    + email: string
+    + company: string
+    + jobtitle: string
+}
 
-exhibitor : id
-exhibitor : name
-exhibitor : email
-exhibitor : company
+class "Exhibitor" as exhibitor {
+    - id: string
+    + name: string
+    + email: string
+    + company: string
+}
 
-moderator : id
-moderator : name
+class "Moderator" as moderator {
+    - id: string
+    + name: string
+    + email: string
+}
 
-session : id
-session : name
-session : description
-session : startdate
-session : enddate
-session : maxdelegates
-session : location
+class "Session" as session {
+    - id: string
+    + name: string
+    + description: string
+    + startdate: date
+    + enddate: date
+    + maxdelegates: int
+    + location: string
+}
 
-speaker : id
-speaker : name
+class "Speaker" as speaker {
+    - id: string
+    + name: string
+}
 
-stand : id
-stand : name
-stand : description
-stand : location
-stand : company
+class "Stand" as stand {
+    - id: string
+    + name: string
+    + description: string
+    + location: string
+}
 
-company : id
-company : name
-company : description
-company : website
+class "Company" as company {
+    - id: string
+    + name: string
+    + description: string
+    + website: string
+}
 
-sessionregistration : id
-sessionregistration : sessionid
-sessionregistration : delegateid
+class "SessionRegistration" as sessionregistration {
+    - id: string
+    - sessionid: string
+    - delegateid: string
+}
 
-standinteraction : id
-standinteraction : standid
-standinteraction : delegateid
-standinteraction : notes
+class "StandInteraction" as standinteraction {
+    - id: string
+    - standid: string
+    - delegateid: string
+    + notes: string
+}
 
-sessioninteraction : id
-sessioninteraction : sessionid
-sessioninteraction : delegateid
-sessioninteraction : question
+class "SessionInteraction" as sessioninteraction {
+    - id: string
+    - sessionid: string
+    - delegateid: string
+    + question: string
+}
 
-moderationresult : id
-moderationresult : moderatorid
-moderationresult : sessioninteractionid
-moderationresult : action
-moderationresult : comment
+class "ModerationResult" as moderationresult {
+    - id: string
+    - moderatorid: string
+    - sessioninteractionid: string
+    + action: string
+    + comment: string
+}
+
+' Relationships
 
 event "1" -- "many" delegate
 event "1" -- "many" session
@@ -112,7 +127,10 @@ moderator "1" -- "many" moderationresult
 
 sessioninteraction "1" -- "1" moderationresult
 
+' Notes
 
-
+note left of moderationresult : A moderation result is the outcome of a moderator\n reviewing a session interaction.  It has an action\n (approve, reject, edit), and a comment.
+note right of standinteraction : A stand interaction is a record of a delegate\n visiting a stand and making notes about it.
+note bottom of sessioninteraction : A session interaction is a record of a delegate\n asking a question during a session.
 
 @enduml
