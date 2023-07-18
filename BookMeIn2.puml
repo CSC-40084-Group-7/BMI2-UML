@@ -147,7 +147,7 @@ sessioninteraction "1" *-- "1" moderationresult
 ' Notes
 
 note left of moderationresult : A moderation result is the outcome of a moderator\n reviewing a session interaction.  It has an action\n (approve, reject, edit), and a comment.
-note right of standinteraction : A stand interaction is a record of a delegate\n visiting a stand and making notes about it.
-note bottom of sessioninteraction : A session interaction is a record of a delegate\n asking a question during a session.
+note left of standinteraction : A stand interaction is a record of a delegate\n visiting a stand and making notes about it.
+note right of sessioninteraction : A session interaction is a record of a delegate\n asking a question during a session.
 
 @enduml
