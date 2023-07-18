@@ -24,6 +24,12 @@ class "Event" as event {
     + maxdelegates: int
 }
 
+class "Person" as person {
+    - id: string
+    + name: string
+    + email: string
+}
+
 class "Delegate" as delegate {
     - id: string
     + name: string
@@ -104,12 +110,6 @@ class "ModerationResult" as moderationresult {
 
 ' Relationships
 
-event -- delegate
-event -- session
-event -- stand
-event -- moderator
-event -- company
-
 delegate -- standinteraction
 delegate -- sessioninteraction
 delegate -- sessionregistration
@@ -117,15 +117,30 @@ delegate -- sessionregistration
 exhibitor -- stand
 company -- exhibitor
 
-session -- speaker
-session -- sessioninteraction
-session -- sessionregistration
 
-stand -- standinteraction
+' Inheritance
 
-moderator -- moderationresult
+person <|-- delegate
+person <|-- exhibitor
+person <|-- moderator
+person <|-- speaker
 
-sessioninteraction -- moderationresult
+' Composition
+
+event *-- session
+event *-- stand
+event *-- delegate
+event *-- moderator
+event *-- company
+
+' Aggregation
+
+session *-- sessioninteraction
+session *-- sessionregistration
+stand *-- standinteraction
+moderator *-- moderationresult
+sessioninteraction *-- moderationresult
+
 
 ' Notes
 
