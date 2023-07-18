@@ -110,39 +110,39 @@ class "ModerationResult" as moderationresult {
 
 ' Relationships
 
-event -- delegate
-event -- moderator
-event -- company
+event "1" -- "many" delegate
+event "1" -- "many" moderator
+event "1" -- "many" company
 
-delegate -- standinteraction
-delegate -- sessioninteraction
-delegate -- sessionregistration
+delegate "1" -- "many" standinteraction : visits
+delegate "1" -- "many" sessioninteraction : asks
+delegate "1" -- "many" sessionregistration : registers
 
-exhibitor -- stand
+exhibitor "1" -- "1" stand : works
 
-company -- exhibitor
+company "1" -- "many" exhibitor : employs
 
-moderator -- moderationresult
+moderator "1" -- "many" moderationresult 
 
 
 ' Inheritance
 
-person <|-- delegate
-person <|-- exhibitor
-person <|-- moderator
-person <|-- speaker
+person <|-- delegate : inherits from
+person <|-- exhibitor : inherits from
+person <|-- moderator : inherits from
+person <|-- speaker : inherits from
 
 ' Composition
 
-event *-- session
-event *-- stand
+event "1" *-- "many" session
+event "1" *-- "many" stand
 
 ' Aggregation
 
-session *-- sessioninteraction
-session *-- sessionregistration
-stand *-- standinteraction
-sessioninteraction *-- moderationresult
+session "1" *-- "many" sessioninteraction
+session "1" *-- "many" sessionregistration
+stand "1" *-- "many" standinteraction
+sessioninteraction "1" *-- "1" moderationresult
 
 ' Notes
 
