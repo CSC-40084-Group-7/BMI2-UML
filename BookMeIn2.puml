@@ -110,7 +110,7 @@ stand "1" -- "many" standinteraction
 
 moderator "1" -- "many" moderationresult
 
-sessioninteraction "1" -- "many" moderationresult
+sessioninteraction "1" -- "1" moderationresult
 
 
 
