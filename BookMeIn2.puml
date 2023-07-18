@@ -104,28 +104,28 @@ class "ModerationResult" as moderationresult {
 
 ' Relationships
 
-event ||--{ delegate
-event ||--{ session
-event ||--{ stand
-event ||--{ moderator
-event ||--{ company
+event -- delegate
+event -- session
+event -- stand
+event -- moderator
+event -- company
 
-delegate ||--{ standinteraction
-delegate ||--{ sessioninteraction
-delegate ||--{ sessionregistration
+delegate -- standinteraction
+delegate -- sessioninteraction
+delegate -- sessionregistration
 
-exhibitor ||--|| stand
-company ||--{ exhibitor
+exhibitor -- stand
+company -- exhibitor
 
-session ||--|| speaker
-session ||--{ sessioninteraction
-session ||--{ sessionregistration
+session -- speaker
+session -- sessioninteraction
+session -- sessionregistration
 
-stand ||--{ standinteraction
+stand -- standinteraction
 
-moderator ||--{ moderationresult
+moderator -- moderationresult
 
-sessioninteraction ||--|| moderationresult
+sessioninteraction -- moderationresult
 
 ' Notes
 
