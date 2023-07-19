@@ -1,4 +1,4 @@
-@startuml BookMeIn2-EntityRelationshipDiagram
+@startuml EntityRelationshipDiagram
 
 skinparam linetype ortho
 

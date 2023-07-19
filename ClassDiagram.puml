@@ -1,4 +1,4 @@
-@startuml BookMeIn2_ClassDiagram
+@startuml ClassDiagram
 
 skinparam linetype ortho
 
