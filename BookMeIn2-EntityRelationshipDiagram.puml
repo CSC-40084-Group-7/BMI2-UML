@@ -205,8 +205,16 @@ entity "Question" as question {
     * QuestionID : int <<generated>>
     ---
     PollId : int <<FK>>
+    QuestionType : int <<FK>>
     Question : string
-    Type : string <<enumeration>>
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "QuestionType" as questiontype {
+    * QuestionTypeID : int <<generated>>
+    ---
+    Type : string
     CreatedDate : date
     LastUpdatedDate : date
 }
@@ -279,5 +287,7 @@ answer ||--|| delegate
 delegate ||--o{ meetingattendee
 delegate ||--|| meeting
 meeting ||--|{ meetingattendee
+
+questiontype ||--o{ question
 
 @enduml
