@@ -54,8 +54,8 @@ entity "Delegate" as delegate {
 entity "DelegateEventRegistration" as delegateregistration {
     * DelegateRegistrationID : int <<generated>>
     ---
-    DelegateID : int
-    EventID : int
+    DelegateID : int <<FK>>
+    EventID : int <<FK>>
     RegistrationDate : date
     LastUpdatedDate : date
 }
@@ -85,8 +85,8 @@ entity "Exhibitor" as exhibitor {
 entity "CompanyRegistration" as companyregistration {
     * CompanyRegistrationID : int <<generated>>
     ---
-    CompanyID : int
-    EventID : int
+    CompanyID : int <<FK>>
+    EventID : int <<FK>>
     RegistrationDate : date
     LastUpdatedDate : date
 }
@@ -118,9 +118,10 @@ entity "Speaker" as speaker {
 }
 
 entity "SpeakerRegistration" as speakerregistration {
-    SpeakerID : int <<PK>>
-    SessionID : int <<PK>>
+    * SpeakerRegistrationID: int <<generated>>
     ---
+    SpeakerID : int <<FK>>
+    SessionID : int <<FK>>
     RegistrationDate : date
     LastUpdatedDate : date
 }
@@ -140,8 +141,8 @@ entity "Moderator" as moderator {
 entity "ModeratorRegistration" as moderatorregistration {
     * ModeratorRegistrationID : int <<generated>>
     ---
-    ModeratorID : int
-    SessionID : int
+    ModeratorID : int <<FK>>
+    SessionID : int <<FK>>
     RegistrationDate : date
     LastUpdatedDate : date
 }
@@ -149,8 +150,8 @@ entity "ModeratorRegistration" as moderatorregistration {
 entity "Stand" as stand {
     * StandID : int <<generated>>
     ---
-    CompanyID : int
-    EventID : int
+    CompanyID : int <<FK>>
+    EventID : int <<FK>>
     Location : string
     CreatedDate : date
     LastUpdatedDate : date
@@ -159,8 +160,8 @@ entity "Stand" as stand {
 entity "DelegateInteration" as delegateinteraction {
     * DelegateInteractionID : int <<generated>>
     ---
-    DelegateID : int
-    SessionID : int
+    DelegateID : int <<FK>>
+    SessionID : int <<FK>>
     Question : string
     Answer : string
     CreatedDate : date
@@ -170,9 +171,9 @@ entity "DelegateInteration" as delegateinteraction {
 entity "SessionInteraction" as sessioninteraction {
     * SessionInteractionID : int <<generated>>
     ---
-    SessionID : int
-    ModeratorID : int
-    DelegateID : int
+    SessionID : int <<FK>>
+    ModeratorID : int <<FK>>
+    DelegateID : int <<FK>>
     Question : string
     Answer : string
     ModerationStatus : string
@@ -183,8 +184,8 @@ entity "SessionInteraction" as sessioninteraction {
 entity "DelegateSessionRegistration" as delegatesessionregistration {
     * DelegateSessionRegistrationID : int <<generated>>
     ---
-    DelegateID : int
-    SessionID : int
+    DelegateID : int <<FK>>
+    SessionID : int <<FK>>
     RegistrationDate : date
     LastUpdatedDate : date
 }
@@ -192,8 +193,8 @@ entity "DelegateSessionRegistration" as delegatesessionregistration {
 entity "Poll" as poll {
     * PollID : int <<generated>>
     ---
-    ModeratorID : int
-    SessionID : int
+    ModeratorID : int <<FK>>
+    SessionID : int <<FK>>
     Type : string
     CreatedDate : date
     LastUpdatedDate : date
@@ -202,7 +203,7 @@ entity "Poll" as poll {
 entity "Question" as question {
     * QuestionID : int <<generated>>
     ---
-    PollId : int
+    PollId : int <<FK>>
     Question : string
     CreatedDate : date
     LastUpdatedDate : date
@@ -211,8 +212,8 @@ entity "Question" as question {
 entity "Answer" as answer {
     * AnswerID : int <<generated>>
     ---
-    QuestionID : int
-    DelegateID : int
+    QuestionID : int <<FK>>
+    DelegateID : int <<FK>>
     Answer : string
     CreatedDate : date
     LastUpdatedDate : date
