@@ -217,44 +217,36 @@ delegate "0..n" -- "0..n" meeting
 
 poll "1" -- "0..n" session
 poll "1" -- "1..n" pollquestion
-pollquestion "1" -- "1..n" pollresponse
-delegate "1" -- "0..n" pollresponse
+delegate "1" -- "0..n" pollanswer
 poll "1" -- "1..n" pollresult
+pollquestion "1" -- "1..n" pollanswer
 
-' event "1" -- "1..n" session
+together {
+    class poll
+    class pollquestion
+    class pollanswer
+    class pollresult
+}
 
-' event "1" -- "1..n" moderator
-' event "1" -- "1..n" company
+together {
+    class exhibitor
+    class company
+    class stand
+    class standinteraction
+}
 
-' delegate "1" -- "0..n" standinteraction : interacts with
-' delegate "1" -- "0..n" sessioninteraction : asks
-' delegate "1" -- "0..n" sessionregistration : registers
+together {
+    class session
+    class speaker
+    class sessionspeaker
+    class sessionquestion
+    class sessionanswer
+}
 
-' exhibitor "1" -- "1" stand : works
-
-' company "1" -- "1..n" exhibitor : employs
-
-' moderator "1" -- "0..n" moderationresult 
-
-' session "1..n" -- "1..n" speaker
-' (session, speaker) .. sessionspeaker 
-
-' ' Composition
-
-' event "1" *-- "1..n" session
-' event "1" *-- "1..n" stand
-
-' ' Aggregation
-
-' session "1" *-- "0..n" sessioninteraction
-' session "1" *-- "0..n" sessionregistration
-' stand "1" *-- "0..n" standinteraction
-' sessioninteraction "1" *-- "1" moderationresult
-
-' Notes
-
-' note left of moderationresult : A moderation result is an association class\n representing the outcome of a moderator\n reviewing a session interaction.  It has an action\n (approve, reject, edit), and a comment.
-' note left of standinteraction : A stand interaction is an association class\n that records a delegate\n visiting a stand and the exhibitor making notes\n about the interaction.
-' note right of sessioninteraction : A session interaction is an association class\n that is a record of a delegate\n asking a question during a session.
+together {
+    class meeting
+    class meetingrequest
+    class meetingresponse
+}
 
 @enduml
