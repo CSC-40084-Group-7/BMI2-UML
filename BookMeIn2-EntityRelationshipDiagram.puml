@@ -176,7 +176,7 @@ entity "SessionInteraction" as sessioninteraction {
     DelegateID : int <<FK>>
     Question : string
     Answer : string
-    ModerationStatus : string
+    ModerationStatus : string <<enumeration>>
     CreatedDate : date
     LastUpdatedDate : date
 }
@@ -219,6 +219,27 @@ entity "Answer" as answer {
     LastUpdatedDate : date
 }
 
+entity "Meeting" as meeting {
+    * MeetingID : int <<generated>>
+    ---
+    DelegateID (Organiser) : int <<FK>>
+    Title : string
+    Description : string
+    Location : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "MeetingAttendee" as meetingattendee {
+    * MeetingAttendeeID : int <<generated>>
+    ---
+    MeetingID : int <<FK>>
+    DelegateID : int <<FK>>
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+
 'Associations
 
 event ||--o{ delegateregistration
@@ -252,3 +273,9 @@ poll ||--o{ answer
 
 session ||--o{ poll
 answer ||--|| delegate
+
+delegate ||--o{ meetingattendee
+delegate ||--|| meeting
+meeting ||--|{ meetingattendee
+
+@enduml
