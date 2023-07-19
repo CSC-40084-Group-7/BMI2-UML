@@ -289,9 +289,9 @@ stand ||--o{ delegateinteraction
 poll ||--|| polltype
 poll ||--|{ question
 question ||--o{ answer
+delegate ||--o{ answer
 
 session ||--o{ poll
-answer ||--|| delegate
 
 delegate ||--o{ meetingattendee
 delegate ||--o{ meeting
