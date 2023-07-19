@@ -194,9 +194,9 @@ entity "DelegateSessionRegistration" as delegatesessionregistration {
 entity "Poll" as poll {
     * PollID : int <<generated>>
     ---
+    PollTypeID : int <<FK>>
     ModeratorID : int <<FK>>
     SessionID : int <<FK>>
-    Type : string
     CreatedDate : date
     LastUpdatedDate : date
 }
@@ -249,6 +249,14 @@ entity "MeetingAttendee" as meetingattendee {
     LastUpdatedDate : date
 }
 
+entity "PollType" as polltype {
+    * PollTypeID : int <<generated>>
+    ---
+    Type : string
+    HelpText : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
 
 'Associations
 
@@ -278,6 +286,7 @@ event ||--o{ stand
 delegate ||--o{ delegateinteraction
 stand ||--o{ delegateinteraction
 
+poll ||--|| polltype
 poll ||--|{ question
 question ||--o{ answer
 
@@ -285,9 +294,9 @@ session ||--o{ poll
 answer ||--|| delegate
 
 delegate ||--o{ meetingattendee
-delegate ||--|| meeting
+delegate ||--o{ meeting
 meeting ||--|{ meetingattendee
 
-questiontype ||--o{ question
+questiontype ||--|| question
 
 @enduml
