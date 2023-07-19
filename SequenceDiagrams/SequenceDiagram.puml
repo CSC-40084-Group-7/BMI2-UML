@@ -23,7 +23,7 @@ deactivate ES
 Delegate -> ES: POST /registerEvent 
 activate ES
 ES -> ES: check registration form
-ES -> ES: add registration to event
+ES -> ES: add delegate to event
 ES -> Delegate: send confirmation
 deactivate ES
 end
