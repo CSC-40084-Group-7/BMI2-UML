@@ -1,14 +1,6 @@
 @startuml DelegateRegistration
 
-/'
-This diagram shows the sequence of events when a new registration for an event is sent by a Delegate. We assume that there are two microservices,
-SessionService and EventService, which are responsible for handling the requests. The Delegate sends a POST request to the SessionService to login.
-The SessionService checks the credentials and sends a session token back to the Delegate. The Delegate then sends a GET request to the EventService
-to get all events. The EventService sends a list of all events back to the Delegate. The Delegate then sends a POST request to the EventService to
-register for an event. The EventService checks the registration form and adds the registration to the event. The EventService then sends a confirmation
-back to the Delegate.
-
-'/
+header Delegate Event Registration Sequence Diagram
 
 actor Delegate
 participant "SessionService" as SS
