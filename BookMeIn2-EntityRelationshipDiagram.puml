@@ -99,6 +99,7 @@ entity "Session" as session {
     Description : string
     StartDate : date
     EndDate : date
+    Location : string
     Capacity : int
     CreatedDate : date
     LastUpdatedDate : date
