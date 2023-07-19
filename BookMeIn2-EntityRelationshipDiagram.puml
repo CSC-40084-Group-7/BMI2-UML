@@ -206,6 +206,7 @@ entity "Question" as question {
     ---
     PollId : int <<FK>>
     Question : string
+    Type : string <<enumeration>>
     CreatedDate : date
     LastUpdatedDate : date
 }
@@ -270,7 +271,7 @@ delegate ||--o{ delegateinteraction
 stand ||--o{ delegateinteraction
 
 poll ||--|{ question
-poll ||--o{ answer
+question ||--o{ answer
 
 session ||--o{ poll
 answer ||--|| delegate
