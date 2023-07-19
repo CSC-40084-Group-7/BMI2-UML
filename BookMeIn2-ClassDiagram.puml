@@ -1,5 +1,7 @@
 @startuml BookMeIn2_ClassDiagram
 
+skinparam linetype ortho
+
 /'
 Glossary
 
@@ -22,12 +24,6 @@ class "Event" as event {
     + enddate: date
     + location: string
     + maxdelegates: int
-}
-
-class "Person" as person {
-    - id: string
-    + name: string
-    + email: string
 }
 
 class "Delegate" as delegate {
@@ -100,56 +96,165 @@ class "SessionInteraction" as sessioninteraction {
     + question: string
 }
 
-class "ModerationResult" as moderationresult {
+class "DelegateRegistration" as delegateregistration {
+    - id: string
+    - delegateid: string
+    - eventid: string
+}
+
+class "CompanyRegistration" as companyregistration {
+    - id: string
+    - companyid: string
+    - eventid: string
+}
+
+class "SessionSpeaker" as sessionspeaker {
+    - id: string
+    - sessionid: string
+    - speakerid: string
+}
+
+class "SessionQuestion" as sessionquestion {
+    - id: string
+    - delegateid: string
+    - sessionid: string
+    + question: string
+}
+
+class "SessionAnswer" as sessionanswer {
+    - id: string
+    - speakerid: string
+    - sessionid: string
+    - sessionquestionid: string
+    + answer: string
+}
+
+class "ModerationResponse" as moderationresponse {
     - id: string
     - moderatorid: string
-    - sessioninteractionid: string
+    - sessionquestionid: string
     + action: string
     + comment: string
 }
 
+class "Meeting" as meeting {
+    - id: string
+    - organiserid: string
+    + startdate: date
+    + enddate: date
+    + location: string
+}
+
+class "MeetingRequest" as meetingrequest {
+    - id: string
+    - organiserid: string
+    - attendeeid: string
+    + startdate: date
+    + enddate: date
+    + location: string
+}
+
+class "MeetingResponse" as meetingresponse {
+    - id: string
+    - meetingrequestid: string
+    - attendeeid: string
+    + response: string
+}
+
+class "Poll" as poll {
+    - id: string
+    - sessionid: string
+}
+
+class "PollQuestion" as pollquestion {
+    - id: string
+    - pollid: string
+    + question: string
+}
+
+class "PollAnswer" as pollanswer {
+    - id: string
+    - pollquestionid: string
+    + answer: string
+}
+
+class "PollResult" as pollresult {
+    - id: string
+    - pollid: string
+    - pollquestionid: string
+    + count: int
+}
+
 ' Relationships
 
-event "1" -- "1..n" delegate
-event "1" -- "1..n" moderator
-event "1" -- "1..n" company
+event "1..n" -- "1..n" delegate
+(event, delegate) .. delegateregistration
 
-delegate "1" -- "0..n" standinteraction : interacts with
-delegate "1" -- "0..n" sessioninteraction : asks
-delegate "1" -- "0..n" sessionregistration : registers
+event "1..n" -- "1..n" company
+(event, company) .. companyregistration
+company "1" -- "1" stand
+event "1" -- "1..n" stand
+exhibitor "1..n" -- "1" company
 
-exhibitor "1" -- "1" stand : works
+event "1" -- "1..n" session
+session "1..n" -- "1..n" speaker
+(session, speaker) .. sessionspeaker
+delegate "0..n" -- "0..n" session
+(delegate, session) .. sessionregistration
 
-company "1" -- "1..n" exhibitor : employs
+delegate "0..n" -- "0..n" sessionquestion
+(delegate, sessionquestion) .. sessioninteraction
+moderator "1" -- "0..n" moderationresponse
+sessionquestion "1" -- "1" moderationresponse
+sessionquestion "1" -- "1" sessionanswer
 
-moderator "1" -- "0..n" moderationresult 
+delegate "0..n" -- "0..n" stand
+(delegate, stand) .. standinteraction
 
-speaker "1" -- "1..n" session : presents
+delegate "0..n" -- "0..n" meeting
+(delegate, meeting) .. meetingrequest
+(delegate, meeting) .. meetingresponse
 
+poll "1" -- "0..n" session
+poll "1" -- "1..n" pollquestion
+pollquestion "1" -- "1..n" pollresponse
+delegate "1" -- "0..n" pollresponse
+poll "1" -- "1..n" pollresult
 
-' Inheritance
+' event "1" -- "1..n" session
 
-person <|-- delegate : inherits from
-person <|-- exhibitor : inherits from
-person <|-- moderator : inherits from
-person <|-- speaker : inherits from
+' event "1" -- "1..n" moderator
+' event "1" -- "1..n" company
 
-' Composition
+' delegate "1" -- "0..n" standinteraction : interacts with
+' delegate "1" -- "0..n" sessioninteraction : asks
+' delegate "1" -- "0..n" sessionregistration : registers
 
-event "1" *-- "1..n" session
-event "1" *-- "1..n" stand
+' exhibitor "1" -- "1" stand : works
 
-' Aggregation
+' company "1" -- "1..n" exhibitor : employs
 
-session "1" *-- "0..n" sessioninteraction
-session "1" *-- "0..n" sessionregistration
-stand "1" *-- "0..n" standinteraction
-sessioninteraction "1" *-- "1" moderationresult
+' moderator "1" -- "0..n" moderationresult 
+
+' session "1..n" -- "1..n" speaker
+' (session, speaker) .. sessionspeaker 
+
+' ' Composition
+
+' event "1" *-- "1..n" session
+' event "1" *-- "1..n" stand
+
+' ' Aggregation
+
+' session "1" *-- "0..n" sessioninteraction
+' session "1" *-- "0..n" sessionregistration
+' stand "1" *-- "0..n" standinteraction
+' sessioninteraction "1" *-- "1" moderationresult
 
 ' Notes
 
-note left of moderationresult : A moderation result is an association class\n representing the outcome of a moderator\n reviewing a session interaction.  It has an action\n (approve, reject, edit), and a comment.
-note left of standinteraction : A stand interaction is an association class\n that records a delegate\n visiting a stand and the exhibitor making notes\n about the interaction.
-note right of sessioninteraction : A session interaction is an association class\n that is a record of a delegate\n asking a question during a session.
+' note left of moderationresult : A moderation result is an association class\n representing the outcome of a moderator\n reviewing a session interaction.  It has an action\n (approve, reject, edit), and a comment.
+' note left of standinteraction : A stand interaction is an association class\n that records a delegate\n visiting a stand and the exhibitor making notes\n about the interaction.
+' note right of sessioninteraction : A session interaction is an association class\n that is a record of a delegate\n asking a question during a session.
 
 @enduml
