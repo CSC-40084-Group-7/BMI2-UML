@@ -258,6 +258,14 @@ entity "PollType" as polltype {
     LastUpdatedDate : date
 }
 
+entity "Location" as location {
+    * LocationID : int <<generated>>
+    ---
+    description : string
+    capacity : int
+    usage (session, meeting, etc) : string
+}
+
 'Associations
 
 event ||--o{ delegateregistration
@@ -296,6 +304,9 @@ session ||--o{ poll
 delegate ||--o{ meetingattendee
 delegate ||--o{ meeting
 meeting ||--|{ meetingattendee
+meeting }o--|| location
+
+session }o--|| location
 
 questiontype ||--|| question
 
