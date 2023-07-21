@@ -48,7 +48,7 @@ entity "Delegate" as delegate {
     Image : string
     CreatedDate : date
     LastUpdatedDate : date
-    Visibility : string <<enumeration>>
+    ProfileVisibility : true
 }
 
 entity "DelegateEventRegistration" as delegateregistration {
@@ -72,6 +72,7 @@ entity "Company" as company {
 entity "Exhibitor" as exhibitor {
     * ExhibitorID : int <<generated>>
     ---
+    CompanyID : int <<FK>>
     FirstName : string
     LastName : string
     Email : string
@@ -148,6 +149,17 @@ entity "ModeratorRegistration" as moderatorregistration {
     LastUpdatedDate : date
 }
 
+class "ModerationResult" as moderationresult {
+    * ModerationResultID : int <<generated>>
+    ---
+    ModeratorID : int <<FK>>
+    SessionInteractionID : int <<FK>>
+    Action: string <<enumeration>>
+    Notes: string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
 entity "Stand" as stand {
     * StandID : int <<generated>>
     ---
@@ -177,7 +189,6 @@ entity "SessionInteraction" as sessioninteraction {
     DelegateID : int <<FK>>
     Question : string
     Answer : string
-    ModerationStatus : string <<enumeration>>
     CreatedDate : date
     LastUpdatedDate : date
 }
@@ -234,6 +245,8 @@ entity "Meeting" as meeting {
     ---
     DelegateID (Organiser) : int <<FK>>
     Title : string
+    StartDate : date
+    EndDate : date
     Description : string
     Location : string
     CreatedDate : date
@@ -263,7 +276,7 @@ entity "Location" as location {
     ---
     description : string
     capacity : int
-    usage (session, meeting, etc) : string
+    usageType (session, meeting, etc) : string
 }
 
 'Associations
@@ -304,10 +317,13 @@ session ||--o{ poll
 delegate ||--o{ meetingattendee
 delegate ||--o{ meeting
 meeting ||--|{ meetingattendee
-meeting }o--|| location
 
+meeting }o--|| location
 session }o--|| location
 
 questiontype ||--|| question
+
+moderator ||--o{ moderationresult
+sessioninteraction ||--o{ moderationresult
 
 @enduml
