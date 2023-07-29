@@ -49,6 +49,7 @@ entity "Delegate" as delegate {
     CreatedDate : date
     LastUpdatedDate : date
     ProfileVisibility : true
+    Notes : string
 }
 
 entity "DelegateEventRegistration" as delegateregistration {
@@ -102,6 +103,7 @@ entity "Session" as session {
     EndDate : date
     Location : string
     Capacity : int
+    RegistrationRequired : bool
     CreatedDate : date
     LastUpdatedDate : date
 }
@@ -165,7 +167,7 @@ entity "Stand" as stand {
     ---
     CompanyID : int <<FK>>
     EventID : int <<FK>>
-    Location : string
+    LocationID : int <<FK>>
     CreatedDate : date
     LastUpdatedDate : date
 }
@@ -277,6 +279,7 @@ entity "Location" as location {
     description : string
     capacity : int
     usageType (session, meeting, etc) : string
+    coordinates : point <<geometry>>
 }
 
 'Associations
@@ -306,6 +309,8 @@ company ||--|{ stand
 event ||--o{ stand
 delegate ||--o{ delegateinteraction
 stand ||--o{ delegateinteraction
+
+stand ||--|| location
 
 poll ||--|| polltype
 poll ||--|{ question
