@@ -58,7 +58,6 @@ entity "User" as user {
     CreatedDate : date
     LastUpdatedDate : date
     ProfileVisibility : true
-    Notes : string
 }
 
 entity "UserRoleMapping" as userrolemapping {
@@ -291,6 +290,16 @@ entity "Location" as location {
     coordinates : point <<geometry>>
 }
 
+entity "Note" as note {
+    * NoteID : int <<generated>>
+    ---
+    UserID : int <<FK>>
+    Title: string
+    Note : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
 'Associations
 user ||--o{ useraccess
 user ||--o{ userrolemapping
@@ -340,7 +349,7 @@ meeting ||--|| location
 session ||--|| location
 stand ||--|| location
 
-
+user ||--o{ note
 
 ' entity "DelegateEventRegistration" as delegateregistration {
 '     * DelegateRegistrationID : int <<generated>>
