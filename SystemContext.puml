@@ -1,0 +1,47 @@
+@startuml ContainerDiagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/users.puml
+
+Person(delegate, "Delegate", "Attends the conference")
+Person(exhibitor, "Exhibitor", "Exhibits at the conference")
+Person(speaker, "Speaker", "Speaks at the conference")
+Person(admin, "Admin", "Manages the conference")
+
+Container(CDN, "Content Delivery Network", "CDN")
+Container(frontend, "Frontend", "React Frontend")
+Container(backend, "Backend APIs", "Backend")
+Container(adminPanel, "Admin Panel", "Admin Control Panel")
+SystemDb(database, "Database", "Database")
+
+Rel(admin, adminPanel, "Uses", "HTTPS")
+Rel(adminPanel, backend, "Uses", "HTTPS, REST API")
+
+Rel(delegate, CDN, "Uses", "HTTPS")
+Rel(exhibitor, CDN, "Uses", "HTTPS")
+Rel(speaker, CDN, "Uses", "HTTPS")
+
+Rel(frontend, backend, "Uses", "HTTPS, REST API")
+Rel(backend, database, "Uses", "TCP")
+Rel(CDN, frontend, "Origin", "HTTPS")
+
+Container(barcodeScanner, "Barcode Scanner", "Barcode Scanner")
+System(scannerApi, "Scanner API", "Barcode Scanner API")
+
+Rel(barcodeScanner, scannerApi, "Uses", "HTTPS")
+Rel(scannerApi, backend, "Uses", "HTTPS, REST API")
+
+Container(reporting, "Reporting Control Panel", "Enables the creation of reports")
+Container(domainevents, "DomainEvents", "Stores domain events")
+
+Rel(database, domainevents, "Emits", "DomainEvents")
+Rel(reporting, domainevents, "Queries", "DomainEvents")
+Rel(admin, reporting, "Uses", "HTTPS")
+
+SHOW_LEGEND()
+@enduml
