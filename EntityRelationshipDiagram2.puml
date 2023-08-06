@@ -1,0 +1,624 @@
+@startuml EntityRelationshipDiagram2
+
+skinparam linetype ortho
+
+/'
+Glossary
+
+Event: The event that is happening, e.g. App Development in a mobile world.
+Delegates: People attending the event, sometimes on behalf of a company.
+Exhibitor: A person attending the event on behalf of their company. Each Exhibitor works at one stand.
+Moderator: Works in the background during a session filtering the questions sent in by delegates, for the purpose of avoiding anything unsuitable being sent to the speaker, and amalgamating similar questions into one so as to avoid repeating the same question
+Session: A talk or presentation happening at the event. Several of these can happen at the same time at larger events and delegates would have to choose which ones they want to attend.  Sometimes these can require a pre-registration of interest to allow entry.
+Speaker: An individual presenting the session. These can be the same as exhibitors, or they may be completely independent.
+Stand: One per company at the event. These companies are ones that have paid to have a stand at the event.  Often these will be sponsors of the event looking to sell some sort of software or service to the delegates.   Multiple Exhibitors may work on one stand though.
+
+Additional Items:
+
+Poll: A question asked by a moderator to the delegates.  This is usually done to gauge the opinion of the delegates on a particular topic.
+StandInteraction: A question asked by a delegate to an exhibitor.  This is usually done to find out more about the company or the products/services they offer.
+'/
+
+'Entities
+
+entity "Event" as event {
+    * EventID : int <<generated>>
+    ---
+    Name : string
+    Description : string
+    StartDate : date
+    EndDate : date
+    Location : string
+    Capacity : int
+    Price : decimal
+    Image : string
+    Status : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "UserAccess" as useraccess {
+    * UserAccessID : int <<generated>>
+    ---
+    UserID : int <<FK>>
+    isSuccessfulLogin: bool
+    Date: date
+}
+
+entity "User" as user {
+    * UserID : int <<generated>>
+    ---
+    FirstName : string
+    LastName : string
+    Password : string
+    Email : string
+    Company : string
+    JobTitle : string
+    Image : string
+    CreatedDate : date
+    LastUpdatedDate : date
+    ProfileVisibility : true
+    Notes : string
+}
+
+entity "UserRoleMapping" as userrolemapping {
+    * UserRoleMappingID : int <<generated>>
+    ---
+    UserID : int <<FK>>
+    RoleID : int <<FK>>
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "Role" as role {
+    * RoleID : int <<generated>>
+    ---
+    Name : string
+    Description : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "RoleAttribute" as roleattribute {
+    * RoleAttributeID : int <<generated>>
+    ---
+    RoleID : int <<FK>>
+    Attribute : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "DelegateEventRegistration" as delegateregistration {
+    * DelegateRegistrationID : int <<generated>>
+    ---
+    UserID : int <<FK>>
+    EventID : int <<FK>>
+    RegistrationDate : date
+    LastUpdatedDate : date
+}
+
+entity "Company" as company {
+    * CompanyID : int <<generated>>
+    ---
+    Name : string
+    Description : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "CompanyRegistration" as companyregistration {
+    * CompanyRegistrationID : int <<generated>>
+    ---
+    CompanyID : int <<FK>>
+    EventID : int <<FK>>
+    RegistrationDate : date
+    LastUpdatedDate : date
+}
+
+entity "Session" as session {
+    * SessionID : int <<generated>>
+    ---
+    EventID : int
+    Name : string
+    Description : string
+    StartDate : date
+    EndDate : date
+    Location : string
+    Capacity : int
+    RegistrationRequired : bool
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "SpeakerRegistration" as speakerregistration {
+    * SpeakerRegistrationID: int <<generated>>
+    ---
+    SpeakerID : int <<FK>>
+    SessionID : int <<FK>>
+    RegistrationDate : date
+    LastUpdatedDate : date
+}
+
+entity "Moderator" as moderator {
+    * ModeratorID : int <<generated>>
+    ---
+    FirstName : string
+    LastName : string
+    Email : string
+    Company : string
+    JobTitle : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "ModeratorRegistration" as moderatorregistration {
+    * ModeratorRegistrationID : int <<generated>>
+    ---
+    ModeratorID : int <<FK>>
+    SessionID : int <<FK>>
+    RegistrationDate : date
+    LastUpdatedDate : date
+}
+
+class "ModerationResult" as moderationresult {
+    * ModerationResultID : int <<generated>>
+    ---
+    ModeratorID : int <<FK>>
+    SessionInteractionID : int <<FK>>
+    Action: string <<enumeration>>
+    Notes: string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "Stand" as stand {
+    * StandID : int <<generated>>
+    ---
+    CompanyID : int <<FK>>
+    EventID : int <<FK>>
+    LocationID : int <<FK>>
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "DelegateInteration" as delegateinteraction {
+    * DelegateInteractionID : int <<generated>>
+    ---
+    DelegateID : int <<FK>>
+    SessionID : int <<FK>>
+    Question : string
+    Answer : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "SessionInteraction" as sessioninteraction {
+    * SessionInteractionID : int <<generated>>
+    ---
+    SessionID : int <<FK>>
+    ModeratorID : int <<FK>>
+    DelegateID : int <<FK>>
+    Question : string
+    Answer : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "DelegateSessionRegistration" as delegatesessionregistration {
+    * DelegateSessionRegistrationID : int <<generated>>
+    ---
+    DelegateID : int <<FK>>
+    SessionID : int <<FK>>
+    RegistrationDate : date
+    LastUpdatedDate : date
+}
+
+entity "Poll" as poll {
+    * PollID : int <<generated>>
+    ---
+    PollTypeID : int <<FK>>
+    ModeratorID : int <<FK>>
+    SessionID : int <<FK>>
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "Question" as question {
+    * QuestionID : int <<generated>>
+    ---
+    PollId : int <<FK>>
+    QuestionType : int <<FK>>
+    Question : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "QuestionType" as questiontype {
+    * QuestionTypeID : int <<generated>>
+    ---
+    Type : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "Answer" as answer {
+    * AnswerID : int <<generated>>
+    ---
+    QuestionID : int <<FK>>
+    DelegateID : int <<FK>>
+    Answer : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "Meeting" as meeting {
+    * MeetingID : int <<generated>>
+    ---
+    DelegateID (Organiser) : int <<FK>>
+    Title : string
+    StartDate : date
+    EndDate : date
+    Description : string
+    Location : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "MeetingAttendee" as meetingattendee {
+    * MeetingAttendeeID : int <<generated>>
+    ---
+    MeetingID : int <<FK>>
+    DelegateID : int <<FK>>
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "PollType" as polltype {
+    * PollTypeID : int <<generated>>
+    ---
+    Type : string
+    HelpText : string
+    CreatedDate : date
+    LastUpdatedDate : date
+}
+
+entity "Location" as location {
+    * LocationID : int <<generated>>
+    ---
+    description : string
+    capacity : int
+    usageType (session, meeting, etc) : string
+    coordinates : point <<geometry>>
+}
+
+'Associations
+user ||--o{ useraccess
+user ||--o{ userrolemapping
+role ||--o{ userrolemapping
+role ||--o{ roleattribute
+
+event ||--o{ delegateregistration
+user ||--o{ delegateregistration
+
+user }o--|| company
+event ||--o{ companyregistration
+company ||--o{ companyregistration
+
+event ||--o{ session
+user ||--o{ speakerregistration
+session ||--|{ speakerregistration
+
+session ||--o{ sessioninteraction
+moderator ||--o{ sessioninteraction
+moderationresult ||--|| sessioninteraction
+user ||--o{ sessioninteraction
+
+user ||--o{ delegatesessionregistration
+session ||--o{ delegatesessionregistration
+
+company ||--|{ stand
+event ||--o{ stand
+
+user ||--o{ delegateinteraction
+stand ||--o{ delegateinteraction
+
+poll }o--|| polltype
+poll ||--|{ question
+question }o--|| questiontype
+question ||--o{ answer
+user ||--o{ answer
+poll ||--|| session
+
+user ||--o{ moderatorregistration
+session ||--|{ moderatorregistration
+
+user ||--o{ meetingattendee
+user ||--o{ meeting
+meeting ||--|{ meetingattendee
+
+meeting ||--|| location
+session ||--|| location
+stand ||--|| location
+
+
+
+' entity "DelegateEventRegistration" as delegateregistration {
+'     * DelegateRegistrationID : int <<generated>>
+'     ---
+'     UserID : int <<FK>>
+'     EventID : int <<FK>>
+'     RegistrationDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Company" as company {
+'     * CompanyID : int <<generated>>
+'     ---
+'     Name : string
+'     Description : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Exhibitor" as exhibitor {
+'     * ExhibitorID : int <<generated>>
+'     ---
+'     CompanyID : int <<FK>>
+'     FirstName : string
+'     LastName : string
+'     Email : string
+'     Company : string
+'     JobTitle : string
+'     Image : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "CompanyRegistration" as companyregistration {
+'     * CompanyRegistrationID : int <<generated>>
+'     ---
+'     CompanyID : int <<FK>>
+'     EventID : int <<FK>>
+'     RegistrationDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Session" as session {
+'     * SessionID : int <<generated>>
+'     ---
+'     EventID : int
+'     Name : string
+'     Description : string
+'     StartDate : date
+'     EndDate : date
+'     Location : string
+'     Capacity : int
+'     RegistrationRequired : bool
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Speaker" as speaker {
+'     * SpeakerID : int <<generated>>
+'     ---
+'     FirstName : string
+'     LastName : string
+'     Email : string
+'     Company : string
+'     JobTitle : string
+'     Image : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "SpeakerRegistration" as speakerregistration {
+'     * SpeakerRegistrationID: int <<generated>>
+'     ---
+'     SpeakerID : int <<FK>>
+'     SessionID : int <<FK>>
+'     RegistrationDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Moderator" as moderator {
+'     * ModeratorID : int <<generated>>
+'     ---
+'     FirstName : string
+'     LastName : string
+'     Email : string
+'     Company : string
+'     JobTitle : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "ModeratorRegistration" as moderatorregistration {
+'     * ModeratorRegistrationID : int <<generated>>
+'     ---
+'     ModeratorID : int <<FK>>
+'     SessionID : int <<FK>>
+'     RegistrationDate : date
+'     LastUpdatedDate : date
+' }
+
+' class "ModerationResult" as moderationresult {
+'     * ModerationResultID : int <<generated>>
+'     ---
+'     ModeratorID : int <<FK>>
+'     SessionInteractionID : int <<FK>>
+'     Action: string <<enumeration>>
+'     Notes: string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Stand" as stand {
+'     * StandID : int <<generated>>
+'     ---
+'     CompanyID : int <<FK>>
+'     EventID : int <<FK>>
+'     LocationID : int <<FK>>
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "DelegateInteration" as delegateinteraction {
+'     * DelegateInteractionID : int <<generated>>
+'     ---
+'     DelegateID : int <<FK>>
+'     SessionID : int <<FK>>
+'     Question : string
+'     Answer : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "SessionInteraction" as sessioninteraction {
+'     * SessionInteractionID : int <<generated>>
+'     ---
+'     SessionID : int <<FK>>
+'     ModeratorID : int <<FK>>
+'     DelegateID : int <<FK>>
+'     Question : string
+'     Answer : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "DelegateSessionRegistration" as delegatesessionregistration {
+'     * DelegateSessionRegistrationID : int <<generated>>
+'     ---
+'     DelegateID : int <<FK>>
+'     SessionID : int <<FK>>
+'     RegistrationDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Poll" as poll {
+'     * PollID : int <<generated>>
+'     ---
+'     PollTypeID : int <<FK>>
+'     ModeratorID : int <<FK>>
+'     SessionID : int <<FK>>
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Question" as question {
+'     * QuestionID : int <<generated>>
+'     ---
+'     PollId : int <<FK>>
+'     QuestionType : int <<FK>>
+'     Question : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "QuestionType" as questiontype {
+'     * QuestionTypeID : int <<generated>>
+'     ---
+'     Type : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Answer" as answer {
+'     * AnswerID : int <<generated>>
+'     ---
+'     QuestionID : int <<FK>>
+'     DelegateID : int <<FK>>
+'     Answer : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Meeting" as meeting {
+'     * MeetingID : int <<generated>>
+'     ---
+'     DelegateID (Organiser) : int <<FK>>
+'     Title : string
+'     StartDate : date
+'     EndDate : date
+'     Description : string
+'     Location : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "MeetingAttendee" as meetingattendee {
+'     * MeetingAttendeeID : int <<generated>>
+'     ---
+'     MeetingID : int <<FK>>
+'     DelegateID : int <<FK>>
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "PollType" as polltype {
+'     * PollTypeID : int <<generated>>
+'     ---
+'     Type : string
+'     HelpText : string
+'     CreatedDate : date
+'     LastUpdatedDate : date
+' }
+
+' entity "Location" as location {
+'     * LocationID : int <<generated>>
+'     ---
+'     description : string
+'     capacity : int
+'     usageType (session, meeting, etc) : string
+'     coordinates : point <<geometry>>
+' }
+
+' 'Associations
+
+' event ||--o{ delegateregistration
+' delegate ||--o{ delegateregistration
+
+' exhibitor }o--|| company
+' event ||--o{ companyregistration
+' company ||--o{ companyregistration
+
+' event ||--o{ session
+' speaker ||--o{ speakerregistration
+' session ||--|{ speakerregistration
+
+' moderator ||--o{ moderatorregistration
+' session ||--|{ moderatorregistration
+
+' session ||--o{ sessioninteraction
+' moderator ||--o{ sessioninteraction
+' delegate ||--o{ sessioninteraction
+
+' delegate ||--o{ delegatesessionregistration
+' session ||--o{ delegatesessionregistration
+
+' company ||--|{ stand
+' event ||--o{ stand
+' delegate ||--o{ delegateinteraction
+' stand ||--o{ delegateinteraction
+
+' stand ||--|| location
+
+' poll ||--|| polltype
+' poll ||--|{ question
+' question ||--o{ answer
+' delegate ||--o{ answer
+
+' session ||--o{ poll
+
+' delegate ||--o{ meetingattendee
+' delegate ||--o{ meeting
+' meeting ||--|{ meetingattendee
+
+' meeting }o--|| location
+' session }o--|| location
+
+' questiontype ||--|| question
+
+' moderator ||--o{ moderationresult
+' sessioninteraction ||--o{ moderationresult
+
+@enduml
